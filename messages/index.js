@@ -35,7 +35,7 @@ var intents = new builder.IntentDialog({ recognizers: [recognizer] })
 .matches('<yourIntent>')... See details at http://docs.botframework.com/builder/node/guides/understanding-natural-language/
 */
 .matches('greeting', (session, args)=> {
-    session.send('Yo estoy bien, como estas tu?');
+    session.send('Yo estoy bien, como estás tu?');
 })
 .onDefault((session) => {
     session.send('Sorry, I did not understand \'%s\'.', session.message.text);

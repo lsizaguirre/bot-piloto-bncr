@@ -1,0 +1,26 @@
+{
+  "name": "bot-demo-bncr",
+  "version": "1.0.1",
+  "description": "Bot demo para el Banco Nacional de Costa Rica",
+  "main": "messages/index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node messages/index.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://gitlab.com/3gmotion-chile/bot-demo-bncr.git"
+  },
+  "author": "lsizaguirre@gmail.com",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://gitlab.com/3gmotion-chile/bot-demo-bncr"
+  },
+  "homepage": "https://gitlab.com/3gmotion-chile/bot-demo-bncr#readme",
+  "dependencies": {
+    "botbuilder": "^3.8.1",
+    "botbuilder-azure": "3.0.2",
+    "dotenv": "^4.0.0",
+    "restify": "^5.2.0"
+  }
+}

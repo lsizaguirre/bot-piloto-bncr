@@ -7,7 +7,10 @@ https://aka.ms/abs-node-luis
 "use strict";
 var builder = require("botbuilder");
 var botbuilder_azure = require("botbuilder-azure");
+var apiairecognizer = require('api-ai-recognizer'); 
 var path = require('path');
+var client_location = require('../libraries/bot_client_location')
+
 require('dotenv').config();
 
 var useEmulator = (process.env.NODE_ENV == 'development');
@@ -29,14 +32,42 @@ var luisAPIHostName = process.env.LuisAPIHostName || 'westus.api.cognitive.micro
 
 const LuisModelUrl = 'https://' + luisAPIHostName + '/luis/v1/application?id=' + luisAppId + '&subscription-key=' + luisAPIKey;
 
-// Main dialog with LUIS
-var recognizer = new builder.LuisRecognizer(LuisModelUrl);
+var recognizer = new apiairecognizer('4007f75ab16b40cfa3fc8cf8e3641db0'); 
 var intents = new builder.IntentDialog({ recognizers: [recognizer] })
+
+
+// Main dialog with LUIS
+//var recognizer = new builder.LuisRecognizer(LuisModelUrl);
+//var intents = new builder.IntentDialog({ recognizers: [recognizer] })
 /*
 .matches('<yourIntent>')... See details at http://docs.botframework.com/builder/node/guides/understanding-natural-language/
 */
 .matches('greeting', (session, args)=> {
     var name = session.message.user ? session.message.user.name : null;
+    
+console.log('Session:' + JSON.stringify(session.message, null, 2));
+//console.log('Args:' + JSON.stringify(args, null, 2));
+/*
+    client_location.NearLocations(process.env.BOT_ID, -76.70335, 30.71045, 5000)
+    .then(
+        function (value) {
+            console.log('Contents a: ' + value);
+        },
+        function (reason) {
+            console.error('Something went wrong', reason);
+        }
+    );
+
+    client_location.AllLocations()
+    .then(
+        function (value) {
+            console.log('Contents b: ' + value);
+        },
+        function (reason) {
+            console.error('Something went wrong', reason);
+        }
+    );
+*/
     session.send(`Yo estoy bien, como estás tu ${name}?`);
 })
 .onDefault((session) => {

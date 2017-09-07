@@ -18,6 +18,7 @@
   },
   "homepage": "https://gitlab.com/3gmotion-chile/bot-demo-bncr#readme",
   "dependencies": {
+    "api-ai-recognizer": "^1.1.1",
     "botbuilder": "^3.8.1",
     "botbuilder-azure": "3.0.2",
     "dotenv": "^4.0.0",

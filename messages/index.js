@@ -25,56 +25,45 @@ var connector = useEmulator ? new builder.ChatConnector() : new botbuilder_azure
 var bot = new builder.UniversalBot(connector);
 bot.localePath(path.join(__dirname, './locale'));
 
-// Make sure you add code to validate these fields
-var luisAppId = process.env.LuisAppId;
-var luisAPIKey = process.env.LuisAPIKey;
-var luisAPIHostName = process.env.LuisAPIHostName || 'westus.api.cognitive.microsoft.com';
+bot.dialog('/Cancelar', [
+    function (session) {
+        session.endDialog('Cancelado el dialogo');
+    }
+]).triggerAction({ matches: /^cancelar/i});
 
-const LuisModelUrl = 'https://' + luisAPIHostName + '/luis/v1/application?id=' + luisAppId + '&subscription-key=' + luisAPIKey;
+var recognizer = new apiairecognizer(process.env['ApiAiToken']); 
+var intents = new builder.IntentDialog({ recognizers: [recognizer] } )
 
-var recognizer = new apiairecognizer('4007f75ab16b40cfa3fc8cf8e3641db0'); 
-var intents = new builder.IntentDialog({ recognizers: [recognizer] })
-
-
-// Main dialog with LUIS
-//var recognizer = new builder.LuisRecognizer(LuisModelUrl);
-//var intents = new builder.IntentDialog({ recognizers: [recognizer] })
-/*
-.matches('<yourIntent>')... See details at http://docs.botframework.com/builder/node/guides/understanding-natural-language/
-*/
-.matches('greeting', (session, args)=> {
+// Main dialog with API.AI
+.onDefault((session, args) => {
+    //session.send('Sorry, I did not understand \'%s\'.', session.message.text);
     var name = session.message.user ? session.message.user.name : null;
-    
-console.log('Session:' + JSON.stringify(session.message, null, 2));
-//console.log('Args:' + JSON.stringify(args, null, 2));
-/*
-    client_location.NearLocations(process.env.BOT_ID, -76.70335, 30.71045, 5000)
-    .then(
-        function (value) {
-            console.log('Contents a: ' + value);
-        },
-        function (reason) {
-            console.error('Something went wrong', reason);
-        }
-    );
-
-    client_location.AllLocations()
-    .then(
-        function (value) {
-            console.log('Contents b: ' + value);
-        },
-        function (reason) {
-            console.error('Something went wrong', reason);
-        }
-    );
-*/
-    session.send(`Yo estoy bien, como estás tu ${name}?`);
-})
-.onDefault((session) => {
-    session.send('Sorry, I did not understand \'%s\'.', session.message.text);
+    //const util = require('util');
+    //console.log('Session:' + util.inspect(session));
+    //console.log('Args:' + util.inspect(args));
+    session.send(name + ', ' + args.entities[0].entity);
 });
 
 bot.dialog('/', intents);    
+
+bot.use({
+    botbuilder: function (session, next) {
+        logMensajeEntrante(session, next);
+        next();
+    },
+    send: function(event, next) {
+        logMensajeSaliente(event, next);
+        next();
+    }
+});
+
+function logMensajeEntrante(session, next) {
+    console.log(session.message.text);
+}
+
+function logMensajeSaliente(event, next) {
+    console.log(event.text);
+}
 
 if (useEmulator) {
     var restify = require('restify');

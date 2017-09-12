@@ -11,6 +11,18 @@ var apiairecognizer = require('api-ai-recognizer');
 var path = require('path');
 var client_location = require('../libraries/bot_client_location')
 
+var mongoose = require('mongoose'),
+    Schema = mongoose.Schema,
+    OutMessageSchema = new Schema({ type: Schema.Types.Mixed }, { strict : false }),
+    OutMessageModel = mongoose.model('out_message', OutMessageSchema),
+    InMessageSchema = new Schema({ type: Schema.Types.Mixed }, { strict : false }),
+    InMessageModel = mongoose.model('in_message', InMessageSchema),
+    ObjectID = mongoose.Types.ObjectId;
+
+//mongoose instance connection url connectio
+mongoose.Promise = global.Promise;
+mongoose.connect('mongodb://digebot-user:nr6Y2tAHRpxo0csF@digebot-cluster-shard-00-00-sexkt.mongodb.net:27017/DigebotDB,digebot-cluster-shard-00-01-sexkt.mongodb.net:27017/DigebotDB,digebot-cluster-shard-00-02-sexkt.mongodb.net:27017/DigebotDB?ssl=true&replicaSet=digebot-cluster-shard-0&authSource=admin'); 
+
 require('dotenv').config();
 
 var useEmulator = (process.env.NODE_ENV == 'development');
@@ -41,7 +53,7 @@ var intents = new builder.IntentDialog({ recognizers: [recognizer] } )
     //const util = require('util');
     //console.log('Session:' + util.inspect(session));
     //console.log('Args:' + util.inspect(args));
-    session.send(name + ', ' + args.entities[0].entity);
+    session.send(name + ' ' + args.entities[0].entity);
 });
 
 bot.dialog('/', intents);    
@@ -58,11 +70,24 @@ bot.use({
 });
 
 function logMensajeEntrante(session, next) {
-    console.log(session.message.text);
+    try {
+        let inObj = session.message;
+        inObj.bot_id = new ObjectID(process.env.BOT_ID);
+        new InMessageModel(inObj).save();
+        console.log(session.message);  
+    } catch (error) {
+        console.log(error)
+    }
 }
 
 function logMensajeSaliente(event, next) {
-    console.log(event.text);
+    try {
+        event.bot_id = new ObjectID(process.env.BOT_ID);
+        new OutMessageModel(event).save();
+        console.log(event);    
+    } catch (error) {
+        console.log(error)
+    }
 }
 
 if (useEmulator) {

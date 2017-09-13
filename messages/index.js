@@ -39,9 +39,32 @@ var intents = new builder.IntentDialog({ recognizers: [recognizer] } )
 .onDefault((session, args) => {
     var name = session.message.user ? session.message.user.name : null;
     session.send(name + ' ' + args.entities[0].entity);
-
-    sendProactiveMessage();
 });
+
+// Add dialog to return list of shirts available
+bot.dialog('showShirts', function (session) {
+    var msg = new builder.Message(session);
+    msg.attachmentLayout(builder.AttachmentLayout.carousel)
+    msg.attachments([
+        new builder.HeroCard(session)
+            .title("Classic White T-Shirt")
+            .subtitle("100% Soft and Luxurious Cotton")
+            .text("Price is $25 and carried in sizes (S, M, L, and XL)")
+            .images([builder.CardImage.create(session, 'http://petersapparel.parseapp.com/img/whiteshirt.png')])
+            .buttons([
+                builder.CardAction.imBack(session, "buy classic white t-shirt", "Buy")
+            ]),
+        new builder.HeroCard(session)
+            .title("Classic Gray T-Shirt")
+            .subtitle("100% Soft and Luxurious Cotton")
+            .text("Price is $25 and carried in sizes (S, M, L, and XL)")
+            .images([builder.CardImage.create(session, 'http://petersapparel.parseapp.com/img/grayshirt.png')])
+            .buttons([
+                builder.CardAction.imBack(session, "buy classic gray t-shirt", "Buy")
+            ])
+    ]);
+    session.send(msg).endDialog();
+}).triggerAction({ matches: /^(show|list)/i });
 
 bot.dialog('/', intents);    
 
@@ -63,28 +86,4 @@ if (useEmulator) {
     module.exports = { default: connector.listen() }
 }
 
-function sendProactiveMessage() {
-    var address = {
-        "id" : "mid.$cAAXXvCjTQUtkrQLNNFee72A56bn6",
-        "channelId" : "facebook",
-        "user" : {
-            "id" : "1421609847955732",
-            "name" : "Saul San Martin Almeyda"
-        },
-        "conversation" : {
-            "isGroup" : false,
-            "id" : "1421609847955732-1644577435616203"
-        },
-        "bot" : {
-            "id" : "1644577435616203",
-            "name" : "bot-piloto-bncr"
-        },
-        "serviceUrl" : "https://facebook.botframework.com"
-    };
-    console.log('Ready to send');
-    var msg = new builder.Message().address(address);
-    msg.text('Hola, este es un push notification');
-    msg.textLocale('en-US');
-    bot.send(msg);
-    console.log('Sent');
-}
+

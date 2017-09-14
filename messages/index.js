@@ -14,7 +14,7 @@ var middleware          = require('../libs/middleware'),
 // Environment variables load 
 require('dotenv').config();
 
-// Define if we are going to use emulator in local enviroment
+// Define if we are going to use emulator in local environment
 var useEmulator = (process.env.NODE_ENV == 'development');
 
 var connector = useEmulator ? new builder.ChatConnector() : new botbuilder_azure.BotServiceConnector({
@@ -43,7 +43,7 @@ var intents = new builder.IntentDialog({ recognizers: [recognizer] } )
 
 bot.dialog('/', intents);    
 
-// Set the Incoming and Outcoming functions for the middleware
+// Set the Incoming and Outgoing functions for the middleware
 bot.use({
     botbuilder: middleware.LogIncomingMessage,
     send: middleware.LogOutgoingMessage

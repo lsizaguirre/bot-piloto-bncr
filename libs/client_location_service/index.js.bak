@@ -1,8 +1,12 @@
+/*
+TO DO:
+- Validar que ocurre cuando process.env.LOC_HOST es undefined
+ */
 'use strict';
 
 const request = require('request');
 
-exports.AllLocations = (bot_id, type_location) => {
+exports.AllLocations = botid => {
 
 	let options = {  
 		url: process.env.LOC_HOST,
@@ -12,14 +16,13 @@ exports.AllLocations = (bot_id, type_location) => {
 			'Accept-Charset': 'utf-8'
 		},
 		qs : {
-			bot: bot_id,
-			type: type_location
+			botid: botid
 		}
 	};
 	return MakeCall(options);
 }
 
-exports.NearLocations = (bot_id, type_location, latitude, longitude, distance = 5000) => {
+exports.NearLocations = (botid, longitude, latitude, distance = 5000) => {
 
 	let options = {  
 		url: process.env.LOC_HOST + '/near',
@@ -29,18 +32,16 @@ exports.NearLocations = (bot_id, type_location, latitude, longitude, distance = 
 			'Accept-Charset': 'utf-8'
 		},
 		qs : {
-			bot: bot_id,
-			type: type_location,
-			latitude: latitude,
+			botid: botid,
 			longitude: longitude,
+			latitude: latitude,
 			distance: distance
 		}
 	};
-	console.log(options);
 	return MakeCall(options);
 }
 
-exports.SearchLocations = (bot_id, type_location, q) => {
+exports.SearchLocations = (botid, q) => {
 
 	let options = {  
 		url: process.env.LOC_HOST + '/search',
@@ -50,12 +51,10 @@ exports.SearchLocations = (bot_id, type_location, q) => {
 			'Accept-Charset': 'utf-8'
 		},
 		qs : {
-			bot: bot_id,
-			type: type_location,
+			botid: botid,
 			q: q
 		}
 	};
-	console.log(options);
 	return MakeCall(options);
 }
 

@@ -12,7 +12,7 @@
     "url": "git+https://gitlab.com/3gmotion-chile/bot-demo-bncr.git"
   },
   "author": "lsizaguirre@gmail.com",
-  "license": "MIT",
+  "license": "ISC",
   "bugs": {
     "url": "https://gitlab.com/3gmotion-chile/bot-demo-bncr"
   },
@@ -21,14 +21,9 @@
     "api-ai-recognizer": "^1.1.1",
     "botbuilder": "^3.8.1",
     "botbuilder-azure": "3.0.2",
-    "botbuilder-location": "^2.0.0",
-    "botbuilder-quickreplies": "^1.1.1",
-    "dashbot": "^9.2.0",
     "dotenv": "^4.0.0",
     "mongoose": "4.10.8",
-    "node-cache": "^4.1.1",
     "request": "^2.81.0",
-    "restify": "^5.2.0",
-    "uuid": "^3.1.0"
+    "restify": "^5.2.0"
   }
 }

@@ -141,7 +141,7 @@ const setDialogs = (bot) => {
                 var point = results.response.geo;
                 //session.send(place.streetAddress + ", " + place.locality + ", " + place.region + ", " + place.country + " (" + place.postalCode + ")");
                 console.log(JSON.stringify(session.userData.locationType, null, 2));
-                clientLocation.NearLocations(process.env.BOT_ID, session.userData.locationType, point.latitude, point.longitude, 500000000000)
+                clientLocation.NearLocations(process.env.BOT_ID, session.userData.locationType, point.latitude, point.longitude, 50000)
                     .then(
                     function (value) {
                         var tarjetas = LocationsToHeroCards(value, builder, session);

@@ -49,15 +49,36 @@ ApiAiRecognizer.prototype.recognize = function (context, done) {
                     let message = result.fulfillment.messages[index];
                     let length = result.fulfillment.messages.length;
 
-                    if (message.platform == 'facebook'|| message.type == 0) {
+                    if (message.platform != 'facebook'&& message.type == 0) {
                         let type = key;
                         let score = 1;
                         let startIndex = -1;
                         let endIndex = -1;
 
                         let entity_found = {
-                            entity: message.type === 0? message.speech: message,
-                            type: message.platform? message.platform: 'fulfillment',
+                            entity: message.speech,
+                            type: 'fulfillment',
+                            startIndex: startIndex,
+                            endIndex: endIndex,
+                            score: score
+                        };
+                        entities_found.push(entity_found);
+                    }
+                }
+
+                for (var index in result.fulfillment.messages) {
+                    let message = result.fulfillment.messages[index];
+                    let length = result.fulfillment.messages.length;
+
+                    if (message.platform == 'facebook') {
+                        let type = key;
+                        let score = 1;
+                        let startIndex = -1;
+                        let endIndex = -1;
+
+                        let entity_found = {
+                            entity: message,
+                            type: message.platform,
                             startIndex: startIndex,
                             endIndex: endIndex,
                             score: score

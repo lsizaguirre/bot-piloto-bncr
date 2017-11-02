@@ -35,6 +35,7 @@ const startLocalServer = connector => {
     // Create the listening
     var restify = require('restify');
     var server = restify.createServer();
+    server.use(restify.plugins.bodyParser());
     server.listen(3978, function() {
         console.log('test bot endpoint at http://localhost:3978/api/messages');
     });

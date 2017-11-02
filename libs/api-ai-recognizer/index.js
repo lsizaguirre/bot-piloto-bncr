@@ -17,7 +17,7 @@ ApiAiRecognizer.prototype.recognize = function (context, done) {
     } catch (err) {
         var sessionId = uuid();
     }
-
+    
     if (context.message.text) {
         var request = this.app.textRequest(context.message.text.toLowerCase(), { sessionId: sessionId });
 

@@ -62,7 +62,7 @@ const startLocalServer = connector => {
             }
         });
         next();
-        res.json(true);
+        res.json('Venezuela');
     });
 }
 

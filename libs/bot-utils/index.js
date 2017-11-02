@@ -50,6 +50,9 @@ const startLocalServer = connector => {
         this.appbot.loadSession(req.body.address, function(err, session){
             if(err) {
                 console.log(err);
+                msg.text('Hubo un error');
+                msg.textLocale('en-US');
+                this.appbot.send(msg);
             }
             else {
                 var msg = new builder.Message().address(req.body.address);

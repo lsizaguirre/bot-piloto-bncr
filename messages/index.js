@@ -24,7 +24,9 @@ const useEmulator     = botUtils.getUseEmulator(),
 dashbotWrapper.setDashbot(bot);
 //bot.use(quickReplies.QuickRepliesMiddleware);
 
+botUtils.startAdditionalServer();
+
 if (useEmulator)
 	botUtils.startLocalServer(connector);
-else
+else 
 	module.exports = { default: connector.listen() }

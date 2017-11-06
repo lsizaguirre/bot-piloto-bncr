@@ -27,7 +27,6 @@ const buildBot = connector => {
     bot.localePath(path.join(__dirname, './locale'));
     bot.library(locationDialog.createLibrary(process.env.BING_MAPS_API_KEY));
     dialogs.setDialogs(bot);
-    this.appbot = bot;
     return bot;
 }
 
@@ -41,43 +40,9 @@ const startLocalServer = connector => {
     server.post('/api/messages', connector.listen());
 }
 
-const startAdditionalServer = () => {
-    var restify = require('restify');
-    var server = restify.createServer();
-    server.use(restify.plugins.bodyParser());
-    server.listen(3979, function() {
-        console.log('Additional endpoint initialized');
-    });
-    server.post('/event/post', (req, res, next) => {
-        console.log('Entré');
-        res.json("Venezuela");
-        /*
-        const builder = require("botbuilder");
-        const botbuilder_azure = require("botbuilder-azure");
-        this.appbot.loadSession(req.body.address, function(err, session){
-            if(err) {
-                console.log(err);
-                msg.text('Hubo un error');
-                msg.textLocale('en-US');
-                this.appbot.send(msg);
-            }
-            else {
-                var msg = new builder.Message().address(req.body.address);
-                msg.text('Work!');
-                msg.textLocale('en-US');
-                session.send(msg);
-            }
-        });
-        next();
-        res.json('Venezuela');
-        */
-    });
-}
-
 module.exports = {
     getUseEmulator: getUseEmulator,
     buildConnector: buildConnector,
     buildBot: buildBot,
-    startLocalServer: startLocalServer,
-    startAdditionalServer: startAdditionalServer
+    startLocalServer: startLocalServer
 };

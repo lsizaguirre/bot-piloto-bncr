@@ -27,8 +27,23 @@ const zeroStep = (session, args, next) => {
                     session.send(element.entity.speech);
                     break;
                 case 2:
-                    builder.Prompts.choice(session, element.entity.title, element.entity.replies.join('|'));
-                    session.endDialog();
+                    if(session.message.source == "facebook") {
+                        // Create a message with some text.
+                        var message = new builder.Message(session).text(element.entity.title);
+
+                        // Add some quick replies.
+                        let replies = [];
+                        element.entity.replies.forEach(function(reply) {
+                            let qr = new quickReplies.QuickReplyText(session, reply, reply);
+                            replies.push(reply);    
+                        });
+                        message = quickReplies.AddQuickReplies(session, message, replies);
+
+                        // Send the message.
+                        session.send(message);
+                    } else {
+                        builder.Prompts.choice(session, element.entity.title, element.entity.replies.join('|'));  
+                    }
                     break;
             }
         });

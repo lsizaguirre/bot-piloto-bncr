@@ -35,7 +35,7 @@ const zeroStep = (session, args, next) => {
                         let replies = [];
                         element.entity.replies.forEach(function(reply) {
                             let qr = new quickReplies.QuickReplyText(session, reply, reply);
-                            replies.push(reply);    
+                            replies.push(qr);    
                         });
                         message = quickReplies.AddQuickReplies(session, message, replies);
 
@@ -43,6 +43,7 @@ const zeroStep = (session, args, next) => {
                         session.send(message);
                     } else {
                         builder.Prompts.choice(session, element.entity.title, element.entity.replies.join('|'));  
+                        session.beginDialog('/preguntarLugar');
                     }
                     break;
             }
@@ -140,6 +141,13 @@ const getDefaultIntent = () => {
 const setDialogs = (bot) => {
 
     bot.dialog('/', getDefaultIntent());
+
+    bot.dialog('/resolvePrompts', [
+        function (session) {
+            //console.log(results.response);
+            console.log('dentro del dialogo');
+        }
+    ]);
 
     bot.dialog('/preguntarLugar', [
         function (session) {

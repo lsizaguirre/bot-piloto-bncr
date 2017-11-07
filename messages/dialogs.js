@@ -27,6 +27,7 @@ const zeroStep = (session, args, next) => {
                     session.send(element.entity.speech);
                     break;
                 case 2:
+                /*
                     if(session.message.source == "facebook") {
                         // Create a message with some text.
                         var message = new builder.Message(session).text(element.entity.title);
@@ -42,9 +43,13 @@ const zeroStep = (session, args, next) => {
                         // Send the message.
                         session.send(message);
                     } else {
-                        builder.Prompts.choice(session, element.entity.title, element.entity.replies.join('|'));  
+                        */
+                        builder.Prompts.choice(session, element.entity.title, element.entity.replies.join('|')); 
+                        session.endDialog(); 
+                        /*
                         session.beginDialog('/preguntarLugar');
                     }
+                    */
                     break;
             }
         });

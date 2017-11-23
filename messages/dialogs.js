@@ -8,16 +8,6 @@ const apiairecognizer = require('../libs/api-ai-recognizer'),
 
 const cache = new NodeCache({ stdTTL: process.env.TTL })
 
-// Debo cambiarlo para que lo consulte en BD o env
-const getLocationType = type => {
-    switch (type) {
-        case 'sucursales': return "59cba7a7ec91022644525ae9";
-        case 'cajeros': return "59cba841ec91022644525aeb";
-        case 'bnservicios': return "59cba86eec91022644525aed";
-        default: return null;
-    }
-}
-
 const zeroStep = (session, args, next) => {
     var facebookEntities = builder.EntityRecognizer.findAllEntities(args.entities, 'facebook');
     if (facebookEntities.length != 0) {
@@ -27,29 +17,8 @@ const zeroStep = (session, args, next) => {
                     session.send(element.entity.speech);
                     break;
                 case 2:
-                /*
-                    if(session.message.source == "facebook") {
-                        // Create a message with some text.
-                        var message = new builder.Message(session).text(element.entity.title);
-
-                        // Add some quick replies.
-                        let replies = [];
-                        element.entity.replies.forEach(function(reply) {
-                            let qr = new quickReplies.QuickReplyText(session, reply, reply);
-                            replies.push(qr);    
-                        });
-                        message = quickReplies.AddQuickReplies(session, message, replies);
-
-                        // Send the message.
-                        session.send(message);
-                    } else {
-                        */
                         builder.Prompts.choice(session, element.entity.title, element.entity.replies.join('|')); 
                         session.endDialog(); 
-                        /*
-                        session.beginDialog('/preguntarLugar');
-                    }
-                    */
                     break;
             }
         });
@@ -77,32 +46,13 @@ const firstStep = (session, args, next) => {
 const secondStep = (session, args) => {
 
     console.log('Intent: ' + args.intent);
-    var locationEntity = builder.EntityRecognizer.findEntity(args.entities, 'Locations');
+    var locationEntity = builder.EntityRecognizer.findEntity(args.entities, 'Tipo-estructura');
     if (locationEntity)
-        session.userData.locationType = getLocationType(locationEntity.entity);
+        session.userData.locationType = locationEntity.entity;
 
     switch (args.intent) {
         case 'locations-near':
             session.beginDialog('/preguntarLugar');
-            break;
-
-        case 'locations-search':
-            clientLocation.SearchLocations(process.env.BOT_ID, null, locationEntity.entity)
-                .then(function (value) {
-                    if (value) {
-                        if (!Array.isArray(value))
-                            value = [value];
-                        var tarjetas = LocationsToHeroCards(value, builder, session);
-                        var msj = new builder.Message(session).attachmentLayout(builder.AttachmentLayout.carousel).attachments(tarjetas);
-                        session.send(msj);
-                    } else {
-                        session.send('No se encontraron registros');
-                    }
-
-                },
-                function (reason) {
-                    console.error('Something went wrong', reason);
-                });
             break;
 
         case 'locations-list':
@@ -116,7 +66,7 @@ const secondStep = (session, args) => {
                             var msj = new builder.Message(session).attachmentLayout(builder.AttachmentLayout.carousel).attachments(tarjetas);
                             session.send(msj);
                         } else {
-                            session.send(`No se encontraron ${locationEntity.entity}`);
+                            session.send('No se encontraron registros');
                         }
                     } else {
                         session.send('No se encontraron registros');

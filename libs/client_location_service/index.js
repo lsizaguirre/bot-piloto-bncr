@@ -3,7 +3,6 @@
 const request = require('request');
 
 exports.AllLocations = (bot_id, type_location) => {
-
 	let options = {  
 		url: process.env.LOC_HOST,
 		method: 'GET',
@@ -15,7 +14,7 @@ exports.AllLocations = (bot_id, type_location) => {
 			bot: bot_id,
 			type: type_location
 		}
-	};
+	}
 	return MakeCall(options);
 }
 
